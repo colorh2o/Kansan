@@ -17,11 +17,15 @@ export function getPublicSupabase() {
   }
 
   try {
-    return { supabase: createContextClient() };
+    return {
+      supabase: createContextClient({
+        env: { url, publishableKeys: { default: publishableKey } },
+      }),
+    };
   } catch {
     return {
       response: NextResponse.json(
-        { error: "Supabase is not configured for public board access." },
+        { error: "Supabase client setup failed. Check the Vercel SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY values, then redeploy." },
         { status: 503 },
       ),
     };
